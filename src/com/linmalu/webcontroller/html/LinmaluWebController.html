@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">
+	var webSocket = new WebSocket("ws://" + location.host + "/LinmaluWebController");
+	webSocket.onopen = function(event)
+	{
+		consoleMessage("LinmaluWebController : 연결 성공");
+		webSocket.send("Password : " + prompt("비밀번호를 입력하세요", ""));
+	};
+	webSocket.onerror = function(event)
+	{
+		consoleMessage("LinmaluWebController : 연결 에러");
+	};
+	webSocket.onclose = function(event)
+	{
+		consoleMessage("LinmaluWebController : 연결 종료");
+	};
+	webSocket.onmessage = function(event)
+	{
+		consoleMessage(event.data);
+	};
+	function consoleMessage(msg)
+	{
+		var console = document.getElementById("LinmaluConsole");
+		console.value += "\r\n" + msg;
+		if (document.getElementById('AutoScroll').checked)
+		{
+			console.scrollTop = console.scrollHeight;
+		}
+	}
+	function sendMessage()
+	{
+		var command = document.getElementById('LinmaluCommand');
+		if (command.value)
+		{
+			webSocket.send(command.value);
+			command.value = "";
+		}
+	}
+</script>
+<title>LinmaluWebController</title>
+</head>
+<body>
+	<textarea id="LinmaluConsole" readonly style="width: 100%; height: 95%;"></textarea><br />
+	<input id="LinmaluCommand" type="text" onkeypress="if(event.keyCode==13){sendMessage()}" style="width: 85%;" />
+	<input type="submit" value="보내기" onclick="sendMessage()" style="width: 10%;" />
+	<input id="AutoScroll" type="checkbox" checked="checked" title="자동스크롤" style="width: 3%;" />
+</body>
+</html>
