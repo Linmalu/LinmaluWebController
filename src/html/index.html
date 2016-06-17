@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang=ko>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/paper/bootstrap.min.css>
+<script src=https://code.jquery.com/jquery-2.x-git.js></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js></script>
+<script src=js/sha256.js></script>
+<script src=js/pbkdf2.js></script>
+<script src=js/gibberish-aes.js></script>
+<script src=js/LinmaluWebController.js></script>
+<title>LinmaluWebController</title>
+</head>
+<body>
+<div class=container-fluid>
+<ul class="nav nav-tabs">
+<li class=active><a href=#chat data-toggle=tab>채팅</a></li>
+<li><a href=#console data-toggle=tab>콘솔</a></li>
+</ul>
+<div class=tab-content>
+<div class="tab-pane fade active in" id=chat>
+<div class="well well-sm" id=chat_div style=overflow:auto;color:lightgray;background-color:black></div>
+<form onsubmit="javasckipt:return chat()">
+<input type=text class=form-control id=chat_text placeholder="채팅을 입력해 주세요.">
+</form>
+</div>
+<div class="tab-pane fade" id=console>
+<div class="well well-sm" id=con_div style=overflow:auto;color:lightgray;background-color:black></div>
+<form onsubmit="javasckipt:return console()">
+<input type=text class=form-control id=con_text placeholder="명령어를 입력해 주세요.">
+</form>
+</div>
+</div>
+</div>
+<div class="modal fade" id=login_modal tabindex=-1 role=dialog aria-labelledby=myModalLabel aria-hidden=true>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<h4 class=modal-title id=myModalLabel>로그인</h4>
+</div>
+<div class=modal-body>
+<form onsubmit="javasckipt:return login()">
+<div class=form-group id=name_group>
+<label class=control-label for=focusedInput>닉네임</label>
+<input type=text class=form-control id=name placeholder="닉네임을 입력해 주세요.">
+</div>
+<div class=form-group id=pass_group>
+<label class=control-label for=focusedInput>비밀번호</label>
+<input type=password class=form-control id=pass placeholder="비밀번호를 입력해 주세요.">
+</div>
+<div class=form-group>
+<button type=submit class="btn btn-primary btn-lg" style=width:100%>로그인</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
