@@ -23,7 +23,7 @@ public class Main extends LinmaluMain
 		super.onEnable();
 		registerCommand(new Main_Command());
 		registerEvents(new Main_Event());
-		registerLibrary("vertx-core-3.2.1.jar");
+		registerLibrary("vertx-core-3.5.0.jar");
 		server = new LinmaluServer();
 	}
 	@Override

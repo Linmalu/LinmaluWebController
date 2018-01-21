@@ -28,7 +28,7 @@ public class LinmaluSecurity
 	{
 		JsonObject json = (JsonObject)new JsonParser().parse(data);
 		player = Bukkit.getOfflinePlayer(json.get("name").getAsString());
-		this.key = new SecretKeySpec(Main.getMain().getPlayersConfig().getData(player.getUniqueId().toString(), String.class).getBytes(Charset.forName("UTF-8")), "AES");
+		this.key = new SecretKeySpec(Main.getMain().getPlayersConfig().getString(player.getUniqueId().toString()).getBytes(Charset.forName("UTF-8")), "AES");
 		if(player.isBanned() || !decrypt(json.get("data").getAsString()).equals("LinmaluWebController"))
 		{
 			throw new Exception();

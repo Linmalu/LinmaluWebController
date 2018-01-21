@@ -32,28 +32,17 @@ public class LinmaluServer
 	private final HashMap<ServerWebSocket, LinmaluSecurity> clients = new HashMap<>();
 	private final PrintStream err = System.err;
 	private final PrintStream out = System.out;
-	//	private final Handler handler = new StreamHandler(out, new Formatter()
-	//	{
-	//		@Override
-	//		public String format(LogRecord record)
-	//		{
-	//			
-	//			return null;
-	//		}
-	//	});
 
 	public LinmaluServer()
 	{
 		LinmaluConfig config = Main.getMain().getMainConfig();
 		String port = "Port";
-		if(!config.isData(port))
+		if(!config.isSet(port))
 		{
-			config.setData(port, 28282);
+			config.set(port, 28282);
 		}
 		server = Vertx.vertx().createHttpServer(new HttpServerOptions().setPort(28282)).requestHandler(request ->
 		{
-			//InputStream in = getClass().getResourceAsStream("/com/linmalu/webcontroller/html/LinmaluWebController.html");
-			//try(InputStream in = getClass().getResourceAsStream("/lib/" + name); FileOutputStream out = new FileOutputStream(file))
 			try(InputStream in = getClass().getResourceAsStream("/html" + (request.path().equals("/") ? "/index.html" : request.path())))
 			{
 				byte[] data = new byte[1024];
@@ -69,18 +58,8 @@ public class LinmaluServer
 			{
 				request.response().setStatusCode(404).end();
 			}
-//			File path = new File("F:/LinmaluWebController", request.path().equals("/") ? "/index.html" : request.path());
-//			if(path.exists())
-//			{
-//				request.response().sendFile(path.toString());
-//			}
-//			else
-//			{
-//				request.response().setStatusCode(404).end();
-//			}
 		}).websocketHandler(ws ->
 		{
-			//ws.endHandler(v -> System.out.println("끝"));
 			ws.closeHandler(v ->
 			{
 				if(clients.containsKey(ws))
@@ -136,7 +115,7 @@ public class LinmaluServer
 					ws.end();
 				}
 			});
-		}).listen(config.getData(port, Integer.class), res ->
+		}).listen(config.getInt(port), res ->
 		{
 			if(res.succeeded())
 			{
@@ -237,49 +216,49 @@ public class LinmaluServer
 	{
 		msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("(", "&#40;").replace(")", "&#41;").replace("\"", "&quot;").replace("\'", "&#x27;").replace("/", "&#x2f;").replace("\r\n", "<br>").replace("\n", "<br>");
 		msg = "<font>" + msg + "</font>";
-		//<BLACK>
+		// <BLACK>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0030\u003B\u0032\u0032\u006D", "</font><font color=\"#000000\">");
-		//<DARK_BLUE>
+		// <DARK_BLUE>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0034\u003B\u0032\u0032\u006D", "</font><font color=\"#0000AA\">");
-		//<DARK_GREEN>
+		// <DARK_GREEN>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0032\u003B\u0032\u0032\u006D", "</font><font color=\"#00AA00\">");
-		//<DARK_AQUA>
+		// <DARK_AQUA>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0036\u003B\u0032\u0032\u006D", "</font><font color=\"#00AAAA\">");
-		//<DARK_RED>
+		// <DARK_RED>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0031\u003B\u0032\u0032\u006D", "</font><font color=\"#AA0000\">");
-		//<DARK_PURPLE>
+		// <DARK_PURPLE>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0035\u003B\u0032\u0032\u006D", "</font><font color=\"#AA00AA\">");
-		//<GOLD>
+		// <GOLD>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0033\u003B\u0032\u0032\u006D", "</font><font color=\"#FFAA00\">");
-		//<GRAY>
+		// <GRAY>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0037\u003B\u0032\u0032\u006D", "</font><font color=\"#AAAAAA\">");
-		//<DARK_GRAY>
+		// <DARK_GRAY>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0030\u003B\u0031\u006D", "</font><font color=\"#555555\">");
-		//<BLUE>
+		// <BLUE>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0034\u003B\u0031\u006D", "</font><font color=\"#5555FF\">");
-		//<GREEN>
+		// <GREEN>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0032\u003B\u0031\u006D", "</font><font color=\"#55FF55\">");
-		//<AQUA>
+		// <AQUA>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0036\u003B\u0031\u006D", "</font><font color=\"#55FFFF\">");
-		//<RED>
+		// <RED>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0031\u003B\u0031\u006D", "</font><font color=\"#FF5555\">");
-		//<LIGHT_PURPLE>
+		// <LIGHT_PURPLE>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0035\u003B\u0031\u006D", "</font><font color=\"#FF55FF\">");
-		//<YELLOW>
+		// <YELLOW>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0033\u003B\u0031\u006D", "</font><font color=\"#FFFF55\">");
-		//<WHITE>
+		// <WHITE>
 		msg = msg.replace("\u001B\u005B\u0030\u003B\u0033\u0037\u003B\u0031\u006D", "</font><font color=\"#FFFFFF\">");
-		//<MAGIC>
+		// <MAGIC>
 		msg = msg.replace("\u001B\u005B\u0035\u006D", "&#40;MAGIC&#41;");
-		//<BOLD>
+		// <BOLD>
 		msg = msg.replace("\u001B\u005B\u0032\u0031\u006D", "&#40;BOLD&#41;");
-		//<STRIKETHROUGH>
+		// <STRIKETHROUGH>
 		msg = msg.replace("\u001B\u005B\u0039\u006D", "&#40;STRIKETHROUGH&#41;");
-		//<UNDERLINE>
+		// <UNDERLINE>
 		msg = msg.replace("\u001B\u005B\u0034\u006D", "&#40;UNDERLINE&#41;");
-		//<ITALIC>
+		// <ITALIC>
 		msg = msg.replace("\u001B\u005B\u0033\u006D", "&#40;ITALIC&#41;");
-		//<RESET>
+		// <RESET>
 		msg = msg.replace("\u001B\u005B\u006D", "</font><font>");
 		return msg;
 	}

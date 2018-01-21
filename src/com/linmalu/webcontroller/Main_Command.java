@@ -11,8 +11,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.linmalu.library.api.LinmaluConfig;
+import com.linmalu.library.api.LinmaluServer;
 import com.linmalu.library.api.LinmaluTellraw;
-import com.linmalu.library.api.LinmaluVersion;
 import com.linmalu.webcontroller.server.LinmaluSecurity;
 
 public class Main_Command implements CommandExecutor
@@ -37,6 +37,7 @@ public class Main_Command implements CommandExecutor
 			}
 		});
 	}
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if(sender instanceof Player)
@@ -44,7 +45,7 @@ public class Main_Command implements CommandExecutor
 			LinmaluConfig config = Main.getMain().getPlayersConfig();
 			if(args.length == 3 && (args[0].equals("생성") || args[0].equalsIgnoreCase("create")))
 			{
-				if(config.isData(((Player)sender).getUniqueId().toString()))
+				if(config.isSet(((Player)sender).getUniqueId().toString()))
 				{
 					sender.sendMessage(Main.getMain().getTitle() + ChatColor.YELLOW + "이미 비밀번호가 있습니다.");
 				}
@@ -56,7 +57,7 @@ public class Main_Command implements CommandExecutor
 				{
 					try
 					{
-						config.setData(((Player)sender).getUniqueId().toString(), LinmaluSecurity.createKey(args[1]));
+						config.set(((Player)sender).getUniqueId().toString(), LinmaluSecurity.createKey(args[1]));
 						sender.sendMessage(Main.getMain().getTitle() + ChatColor.GREEN + "비밀번호가 생성되었습니다." + ChatColor.GRAY + "(비밀번호는 암호화되어 확인이 불가능합니다.)");
 					}
 					catch(Exception e)
@@ -69,9 +70,9 @@ public class Main_Command implements CommandExecutor
 			}
 			else if(args.length == 1 && (args[0].equals("삭제") || args[0].equalsIgnoreCase("delete")))
 			{
-				if(config.isData(((Player)sender).getUniqueId().toString()))
+				if(config.isSet(((Player)sender).getUniqueId().toString()))
 				{
-					config.removeData(((Player)sender).getUniqueId().toString());
+					config.remove(((Player)sender).getUniqueId().toString());
 					sender.sendMessage(Main.getMain().getTitle() + ChatColor.GREEN + "비밀번호가 삭제되었습니다.");
 				}
 				else
@@ -85,10 +86,9 @@ public class Main_Command implements CommandExecutor
 		LinmaluTellraw.sendChat(sender, "/" + label + " create", ChatColor.GOLD + "/" + label + " 생성/create <비밀번호> <비밀번호>" + ChatColor.GRAY + " : 비밀번호 생성");
 		LinmaluTellraw.sendChat(sender, "/" + label + " create", ChatColor.GOLD + "/" + label + " 삭제/delete" + ChatColor.GRAY + " : 비밀번호 삭제");
 		sender.sendMessage(ChatColor.YELLOW + "제작자 : " + ChatColor.AQUA + "린마루(Linmalu)" + ChatColor.WHITE + " - http://blog.linmalu.com");
-		sender.sendMessage(ChatColor.YELLOW + "카페 : " + ChatColor.WHITE + "http://cafe.naver.com/craftproducer");
 		if(sender.isOp())
 		{
-			LinmaluVersion.check(Main.getMain(), sender);
+			LinmaluServer.version(Main.getMain(), sender);
 		}
 		return true;
 	}
